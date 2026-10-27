@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="utf-8">
+    <title>الأوركيد - Orchid</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+    <section class="scr" id="s-welcome">
+        <div class="logo">
+            <img src="logo.png" alt="لوجو الأوركيد" class="splash-logo">
+        </div>
+        <h1>الأوركيد · Orchid</h1>
+        <p>مساحة آمنة للدعم النفسي وتعلّم الإنجليزية 💜</p>
+        <div class="row">
+            <div class="role" onclick="pick('child')"><span>🧒</span>أنا طفل<br><small>Let's Play!</small></div>
+            <div class="role" onclick="pick('parent')"><span>👨‍👩‍👧</span>أنا ولي أمر<br><small>Parent Portal</small></div>
+        </div>
+    </section>
+
+    <section class="scr" id="s-login" hidden>
+        <div class="panel">
+            <h2>🔐 التحقق من السجل المدني</h2>
+            <p class="hint">محاكاة: السنة من الخانتين 3-4 من هوية الطفل (مثال 1015xxxxxx = مواليد 2015)</p>
+            <input id="pid" inputmode="numeric" maxlength="10" placeholder="رقم هوية ولي الأمر (10 أرقام)">
+            <input id="cid" inputmode="numeric" maxlength="10" placeholder="رقم هوية الطفل (10 أرقام)">
+            <input id="cname" placeholder="اسم الطفل">
+            <p id="err" class="bad"></p>
+            <button class="btn" onclick="verify()">تحقق ✅</button>
+            <p class="hint"><a href="#" onclick="demo(2017);return false">مثال: 9 سنوات</a> · <a href="#" onclick="demo(2010);return false">مثال: 16 سنة</a></p>
+            <button class="btn ghost" onclick="show('s-welcome')">رجوع</button>
+        </div>
+    </section>
+
+    <section class="scr" id="s-sorry" hidden>
+        <div class="big">🌸</div>
+        <h2>نعتذر منك بلطف</h2>
+        <p id="sorryTxt" style="max-width:480px"></p>
+        <button class="btn" onclick="show('s-welcome')">العودة للرئيسية</button>
+    </section>
+
+    <section class="scr" id="s-mood" hidden>
+        <h2 id="moodQ">كيف تشعر الآن يا بطل؟</h2>
+        <p>اضغط على الوجه الذي يشبه شعورك</p>
+        <div class="moods" id="moods1"></div>
+    </section>
+
+    <section class="scr" id="s-app" hidden>
+        <nav>
+            <!-- <span style="font-size:1.8rem">            <img src="logo.png" alt="لوجو الأوركيد" class="splash-logo">
+</span><b>الأوركيد</b> -->
+            <div class="logo-container">
+                <span class="logo-icon">
+        <img src="logo.png" alt="لوجو الأوركيد" class="splash-logoo">
+    </span>
+                <b class="logo-text">الأوركيد</b>
+            </div>
+
+            <span class="sp"></span>
+            <span class="chip">👤 <span id="nm"></span></span>
+            <span class="chip">⭐ <span id="pts">0</span></span>
+            <span class="chip">🪙 <span id="tok">0</span></span>
+            <button class="btn gold" onclick="openM('m-parent')">لوحة ولي الأمر</button>
+            <button class="btn ghost" onclick="startExit()">خروج 🚪</button>
+        </nav>
+        <div class="wrap">
+            <div class="banner">
+                <i style="top:10px;right:6%">🌟</i><i style="bottom:8px;left:8%;animation-delay:1s">✨</i><i style="top:14px;left:40%;animation-delay:2s">🦋</i>
+                <h2>أهلاً بك يا بطل في الأوركيد! جاهز لمغامرة اليوم؟ 🌟</h2>
+            </div>
+            <div class="grid">
+                <div class="core" onclick="openWs()"><span>💜</span>
+                    <h3>ورشات الدعم النفسي والاجتماعي</h3>
+                    <p>المواعيد والمراكز واحجز مقعدك</p>
+                </div>
+                <div class="core" onclick="openEn()"><span>📘</span>
+                    <h3>رحلتي لتعلم الإنجليزية</h3>
+                    <p>مستويات ونقاط وتوكنز</p>
+                </div>
+                <div class="core" onclick="openM('m-ex')"><span>🎨</span>
+                    <h3>عبر عن نفسك</h3>
+                    <p>Express Yourself · ارسم وسجّل</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modals -->
+    <div class="modal" id="m-ws" hidden>
+        <div class="box"><button class="x" onclick="closeM('m-ws')">✕</button>
+            <h2>💜 الورشات المتاحة</h2>
+            <div id="wsList"></div>
+            <div id="wsQR" hidden class="vch">
+                <h3>تم الحجز! 🎉</h3><canvas id="qr1" width="200" height="200"></canvas>
+                <p id="wsInfo"></p>
+                <p class="hint">اعرض الرمز في المركز عند الحضور</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="m-en" hidden>
+        <div class="box"><button class="x" onclick="closeM('m-en')">✕</button>
+            <h2>📘 رحلتي لتعلم الإنجليزية</h2>
+            <div id="enBody"></div>
+        </div>
+    </div>
+
+    <div class="modal" id="m-ex" hidden>
+        <div class="box"><button class="x" onclick="closeM('m-ex')">✕</button>
+            <h2>🎨 عبر عن نفسك</h2>
+            <div class="row"><button class="btn" onclick="tab('draw')">🖌️ الرسم</button><button class="btn gold" onclick="tab('voice')">🎙️ الاستوديو الصوتي</button></div>
+            <div id="t-draw">
+                <canvas id="cv" width="800" height="420"></canvas>
+                <div class="pal" id="pal"></div>
+                <div class="row"><input type="range" id="bs" min="2" max="40" value="8" style="width:140px"><button class="btn ghost" onclick="clr()">🧽 مسح</button><button class="btn ghost" onclick="eraser()">⬜ ممحاة</button></div>
+            </div>
+            <div id="t-voice" hidden>
+                <div class="bars" id="bars"></div>
+                <p id="rt">00:00</p>
+                <button class="btn" id="rec" onclick="rec()">⏺️ ابدأ التسجيل</button>
+                <h3>🌿 خلفيات طبيعية</h3>
+                <div class="row"><button class="btn ghost" onclick="amb('rain',this)">🌧️ مطر</button><button class="btn ghost" onclick="amb('birds',this)">🐦 عصافير</button></div>
+                <div id="recs"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="m-parent" hidden>
+        <div class="box"><button class="x" onclick="closeM('m-parent')">✕</button>
+            <h2>👨‍👩‍👧 لوحة ولي الأمر</h2>
+            <div id="pBody" style="text-align:right"></div>
+        </div>
+    </div>
+
+    <div class="modal" id="m-exit" hidden>
+        <div class="box"><button class="x" onclick="closeM('m-exit')">✕</button>
+            <div id="exBody"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
